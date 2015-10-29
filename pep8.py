@@ -54,6 +54,7 @@ import time
 import inspect
 import keyword
 import tokenize
+import json
 from optparse import OptionParser
 from fnmatch import fnmatch
 try:
@@ -1711,6 +1712,43 @@ class FileReport(BaseReport):
     print_filename = True
 
 
+class CodeClimateReport(BaseReport):
+    """Print results of the checks in Code Climate format."""
+
+    def error(self, line_number, offset, text, check):
+        """Print an error in Code Climate format."""
+
+        code = super(CodeClimateReport, self).error(line_number, offset,
+                                                    text, check)
+        if code:
+            issue = {
+                'type': 'issue',
+                'check_name': code,
+                'categories': ['Style'],
+                'description': text[5:].capitalize(),
+                'remediation_points': 50000,
+                'location': {
+                    'path': os.path.normpath(self.filename),
+                    'positions': {
+                        'begin': {
+                            'line': line_number,
+                            'column': offset
+                        },
+                        'end': {
+                            'line': line_number,
+                            'column': offset
+                        }
+                    }
+                },
+                'content': {
+                    'body': check.__doc__.strip()
+                }
+            }
+            print(json.dumps(issue)+'\0')
+
+        return code
+
+
 class StandardReport(BaseReport):
     """Collect and print the results of the checks."""
 
@@ -1964,6 +2002,8 @@ def get_parser(prog='pep8', version=__version__):
     parser.add_option('--diff', action='store_true',
                       help="report changes only within line number ranges in "
                            "the unified diff received on STDIN")
+    parser.add_option('--codeclimate', action='store_true',
+                      help="print report in Code Climate format")
     group = parser.add_option_group("Testing Options")
     if os.path.exists(TESTSUITE_PATH):
         group.add_option('--testsuite', metavar='dir',
@@ -2091,6 +2131,8 @@ def process_options(arglist=None, parse_argv=False, config_file=None,
         stdin = stdin_get_value()
         options.selected_lines = parse_udiff(stdin, options.filename, args[0])
         args = sorted(options.selected_lines)
+    elif options.codeclimate:
+        options.reporter = CodeClimateReport
 
     return options, args
 
@@ -2142,7 +2184,7 @@ def _main():
     if report.total_errors:
         if options.count:
             sys.stderr.write(str(report.total_errors) + '\n')
-        sys.exit(1)
+            sys.exit(1)
 
 if __name__ == '__main__':
     _main()
