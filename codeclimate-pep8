@@ -9,11 +9,10 @@ if os.path.exists("/config.json"):
     contents = open("/config.json").read()
     config = json.loads(contents)
 
-    if config.get("include_paths"):
-        config_paths = config.get("include_paths")
+    i_paths = config.get("include_paths")
+    if type(i_paths) == list:
         python_paths = []
-
-        for i in config_paths:
+        for i in i_paths:
             ext = os.path.splitext(i)[1]
             if os.path.isdir(i) or "py" in ext:
                 python_paths.append(i)
