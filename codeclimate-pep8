@@ -14,7 +14,7 @@ if os.path.exists("/config.json"):
         python_paths = []
         for i in i_paths:
             ext = os.path.splitext(i)[1]
-            if os.path.isdir(i) or "py" in ext:
+            if os.path.isdir(i) or ext == ".py":
                 python_paths.append(i)
         include_paths = python_paths
 
