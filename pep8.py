@@ -1735,11 +1735,11 @@ class CodeClimateReport(BaseReport):
                     'positions': {
                         'begin': {
                             'line': line_number,
-                            'column': offset
+                            'column': offset + 1
                         },
                         'end': {
                             'line': line_number,
-                            'column': offset
+                            'column': offset + 1
                         }
                     }
                 },
