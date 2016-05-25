@@ -1,0 +1,23 @@
+#!/usr/bin/env python
+
+import json
+import os.path
+
+include_paths = ["."]
+
+if os.path.exists("/config.json"):
+    contents = open("/config.json").read()
+    config = json.loads(contents)
+
+    i_paths = config.get("include_paths")
+    if type(i_paths) == list:
+        python_paths = []
+        for i in i_paths:
+            ext = os.path.splitext(i)[1]
+            if os.path.isdir(i) or ext == ".py":
+                python_paths.append(i)
+        include_paths = python_paths
+
+if len(include_paths) > 0:
+    args = " ".join(include_paths)
+    os.system("/usr/src/app/pep8.py --codeclimate {0}".format(args))
