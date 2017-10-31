@@ -1,0 +1,7 @@
+.codeclimate.yml
+.dockerignore
+.git*
+Dockerfile
+LICENSE
+Makefile
+README.md

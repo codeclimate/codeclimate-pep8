@@ -1,11 +1,15 @@
 FROM alpine:edge
 
-RUN apk --update add python3 && \
-  rm /var/cache/apk/*
-
 WORKDIR /usr/src/app
 
-RUN adduser -u 9000 app -D
+RUN adduser -u 9000 -D app
+
+RUN apk add --no-cache python3 && \
+  rm /var/cache/misc/*
+
+COPY requirements.txt /usr/src/app
+RUN pip3 install -r requirements.txt
+
 COPY . /usr/src/app
 RUN chown -R app:app /usr/src/app
 
