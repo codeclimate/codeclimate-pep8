@@ -2,6 +2,67 @@
 
 import json
 import os.path
+from pycodestyle import BaseReport, StyleGuide
+import sys
+
+class CodeClimateReport(BaseReport):
+    """Print results of the checks in Code Climate format."""
+
+    def error(self, line_number, offset, text, check):
+        """Print an error in Code Climate format."""
+
+        code = super(CodeClimateReport, self).error(line_number, offset,
+                                                    text, check)
+        if code:
+            issue = {
+                'type': 'issue',
+                'check_name': code,
+                'categories': ['Style'],
+                'description': text[5:].capitalize(),
+                'remediation_points': 50000,
+                'location': {
+                    'path': os.path.normpath(self.filename),
+                    'positions': {
+                        'begin': {
+                            'line': line_number,
+                            'column': offset + 1
+                        },
+                        'end': {
+                            'line': line_number,
+                            'column': offset + 1
+                        }
+                    }
+                },
+                'content': {
+                    'body': check.__doc__.strip()
+                }
+            }
+            print(json.dumps(issue)+'\0')
+
+        return code
+
+
+def run(paths):
+    """Parse options and run checks on Python source."""
+    import signal
+
+    # Handle "Broken pipe" gracefully
+    try:
+        signal.signal(signal.SIGPIPE, lambda signum, frame: sys.exit(1))
+    except AttributeError:
+        pass    # not supported on Windows
+
+    style_guide = StyleGuide(
+            paths=paths,
+            reporter=CodeClimateReport)
+    options = style_guide.options
+
+    report = style_guide.check_files()
+
+    if report.total_errors:
+        if options.count:
+            sys.stderr.write(str(report.total_errors) + '\n')
+            sys.exit(1)
 
 include_paths = ["."]
 
@@ -18,6 +79,9 @@ if os.path.exists("/config.json"):
                 python_paths.append(i)
         include_paths = python_paths
 
+
 if len(include_paths) > 0:
     args = " ".join(include_paths)
-    os.system("/usr/src/app/pep8.py --codeclimate {0}".format(args))
+    sys.stderr.write(args)
+    run(include_paths)
+    #os.system("/usr/src/app/pep8.py --codeclimate {0}".format(args))

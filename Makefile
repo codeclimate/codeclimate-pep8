@@ -1,13 +1,6 @@
-test :
-	python pep8.py --testsuite testsuite
+.PHONY: image
 
-selftest :
-	python pep8.py --statistics pep8.py
+IMAGE_NAME ?= codeclimate/codeclimate-pep8
 
-doctest :
-	python pep8.py --doctest
-
-unittest :
-	python -m testsuite.test_all
-
-alltest : test selftest doctest unittest
+image:
+	docker build --rm -t $(IMAGE_NAME) .
