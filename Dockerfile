@@ -4,8 +4,7 @@ WORKDIR /usr/src/app
 
 RUN adduser -u 9000 -D app
 
-RUN apk add --no-cache python3 && \
-  rm /var/cache/misc/*
+RUN apk add --no-cache python3
 
 COPY requirements.txt /usr/src/app
 RUN pip3 install -r requirements.txt
