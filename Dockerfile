@@ -1,4 +1,4 @@
-FROM alpine:edge
+FROM alpine:3.15.5
 
 WORKDIR /usr/src/app
 
