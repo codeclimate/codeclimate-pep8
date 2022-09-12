@@ -16,7 +16,7 @@ has not been updated to incorporate that name change.
 To make configuration specifications in your `setup.cfg` file or `tox.ini` file,
 the Code Climate PEP8 engine requires that you include those changes in:
 
-* a `[pep8]` config section
+* a `[pep8]` config section.
 * instead of `[pycodestyle]` config section.
 
 [pep8]: http://www.python.org/dev/peps/pep-0008/
