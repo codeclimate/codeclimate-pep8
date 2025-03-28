@@ -1,24 +1,31 @@
-# pep8 - Python style guide checker
+# Try Qlty today, the newest edition of Code Climate Quality.
+#### This repository is deprecated and archived.
 
-pep8 is a tool to check your Python code against some of the style
-conventions in [PEP 8][pep8].
+This is a repository for a Code Climate Quality plugin which is packaged as a Docker image.
 
-# codeclimate-pep8
+Code Climate Quality is being replaced with the new [Qlty](qlty.sh) code quality platform. Qlty uses a new plugin system which does not require packaging plugins as Docker images.
 
-For information on using pep8 with [Code Climate][cc], see the
-[Code Climate pep8 docs][docs].
+As a result, this repository is no longer maintained and has been archived.
 
-## configuration
+## Advantages of Qlty plugins
+The new Qlty plugins system provides key advantages over the older, Docker-based plugin system:
 
-The PEP8 project has been renamed to pycodestyle. The Code Climate PEP8 engine
-has not been updated to incorporate that name change.
+- Linting runs much faster without the overhead of virtualization
+- New versions of linters are available immediately without needing to wait for a re-packaged release
+- Plugins can be run with any arbitrary extensions (like extra rules and configs) without requiring pre-packaging
+- Eliminates security issues associated with exposing a Docker daemon
 
-To make configuration specifications in your `setup.cfg` file or `tox.ini` file,
-the Code Climate PEP8 engine requires that you include those changes in:
+## Try out Qlty today free
 
-* a `[pep8]` config section.
-* instead of `[pycodestyle]` config section.
+[Qlty CLI](https://docs.qlty.sh/cli/quickstart) is the fastest linter and auto-formatter for polyglot teams. It is completely free and available for Mac, Windows, and Linux.
 
-[pep8]: http://www.python.org/dev/peps/pep-0008/
-[cc]: https://codeclimate.com/
-[docs]: https://docs.codeclimate.com/docs/pep8
+  - Install Qlty CLI:
+`
+curl https://qlty.sh | sh # Mac or Linux
+`
+or ` <windows install line> `
+
+[Qlty Cloud](https://docs.qlty.sh/cloud/quickstart) is a full code health platform for integrating code quality into development team workflows. It is free for unlimited private contributors.
+  - [Try Qlty Cloud today](https://docs.qlty.sh/cloud/quickstart)
+
+**Note**: For existing customers of Quality, please see our [Migration Guide](https://docs.qlty.sh/migration/guide) for more information and resources.
